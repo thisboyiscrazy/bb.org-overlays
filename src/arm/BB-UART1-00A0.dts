@@ -7,6 +7,7 @@
  * it under the terms of the GNU General Public License version 2 as
  * published by the Free Software Foundation.
  */
+
 /dts-v1/;
 /plugin/;
 
@@ -29,7 +30,18 @@
 
 		"uart1";		// hardware ip used
 
+	/*
+	 * Free up the pins used by the cape from the pinmux helpers.
+	 */
 	fragment@0 {
+		target = <&ocp>;
+		__overlay__ {
+			P9_24_pinmux { status = "disabled"; };	/* uart1_txd */
+			P9_26_pinmux { status = "disabled"; };	/* uart1_rxd */
+		};
+	};
+
+	fragment@1 {
 		target = <&am33xx_pinmux>;
 		__overlay__ {
 			bb_uart1_pins: pinmux_bb_uart1_pins {
@@ -43,7 +55,7 @@
 		};
 	};
 
-	fragment@1 {
+	fragment@2 {
 		target = <&uart1>;
 		__overlay__ {
 			status = "okay";
